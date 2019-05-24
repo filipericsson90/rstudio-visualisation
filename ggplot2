@@ -1,0 +1,45 @@
+--------------------------------------#Scatterplot with regression line and confidence intervals----------------------------------
+
+new_scatter <- ggplot(df) +
+  geom_point(mapping = aes(x = df$x, y = df$y), alpha = 1) +
+  geom_smooth(mapping = aes(x = df$x, y = df$y), method = "lm", color = "red") +
+  labs(
+    title = "Relationship between df$x and df$y", 
+    subtitle = "With regression line, with 95% CI", 
+    x = "df$x", 
+    y = "df$xy"
+  ) +
+  theme_minimal() +
+  annotate("text", x = 47, y = 29, label = "y = XXXx + XXX , R^2 = XXX, p-value = XXX") +
+  ggsave("New_scatter.png", width = 10, height = 7)
+print(new_scatter)
+
+-------------------------------------#Boxplot, where x is a column of categorical variables (e.g. 2D_LVEF and 3D_LVEF)------------
+
+new_boxplot <- ggplot(data = df, x = x, y = y) +
+  geom_boxplot(aes(x = x, y = y), fill ="grey") +
+  labs(
+    title = "Boxplot of the distribution of df_variable in X and Y",
+    x = "df of x",
+    y = " Y "
+  ) +
+  theme_minimal() +
+  ggsave("new_boxplot.png", width = 10, height = 7)
+print(new_boxplot)
+ 
+------------------------------------------------------#Histograms---------------------------------------------------------
+  
+  XXX_hist <- ggplot(data = df, mapping = aes(x = x)) +
+  geom_histogram(binwidth = 5) +
+  coord_cartesian(ylim = c(Y1, Y2), (xlim = c(x1, x2))) +
+    labs(
+    x = "xxx",
+    y = "yyy"),
+    title = "Distribution of 3D LVEDV"
+    ) + 
+    theme_minimal()
+    ggsave("xxx_hist.png", width = 10, height = 7)
+print(XXX_hist)
+
+
+
