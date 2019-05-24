@@ -1,3 +1,8 @@
+#Packages needed:
+library(tidyverse)
+library(readxl)
+library(gridExtra)
+
 --------------------------------------#Scatterplot with regression line and confidence intervals----------------------------------
 
 new_scatter <- ggplot(df) +
@@ -41,5 +46,8 @@ print(new_boxplot)
     ggsave("xxx_hist.png", width = 10, height = 7)
 print(XXX_hist)
 
+---------------------------------------------------#Arrange plots next to eachother with GridExtra
+ncol = number of columns
 
+grid_plot12 <- grid.arrange(Plot1, Plot2, ncol = X)
 
