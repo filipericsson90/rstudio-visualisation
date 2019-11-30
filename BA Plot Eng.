@@ -1,0 +1,23 @@
+Assign sensible names to the two pine tree height samples in the dataframe.
+
+names(sample_df) <- c("Sample_1", "Sample_2")
+
+Each row in the dataframe consists of a pair of measurements. The Bland-Altman plot has the average of the two measures in a pair on the x-axis. The y-axis contains the difference between the two measures in each pair. Add the averages and differences data to the dataframe.
+
+sample_df$Avg <- (sample_df$Sample_1 + sample_df$Sample_2) / 2
+sample_df$Dif <- sample_df$Sample_1 - sample_df$Sample_2
+
+Finally, code the plot and add the mean difference (blue line) and a 95% confidence interval (red lines) for predictions of a mean difference. This prediction interval gives the level of agreement (1.96 * SD).
+
+ggplot(sample_df, aes(x = Avg, y = Dif)) +
+  geom_point(alpha = 0.5) +
+  geom_hline(yintercept = mean(sample_df$Dif), colour = "blue", size = 0.5) +
+  geom_hline(yintercept = mean(sample_df$Dif) - (1.96 * sd(sample_df$Dif)), colour = "red", size = 0.5) +
+  geom_hline(yintercept = mean(sample_df$Dif) + (1.96 * sd(sample_df$Dif)), colour = "red", size = 0.5) +
+  ylab("Diff. Between Measures") +
+  xlab("Average Measure")
+
+
+
+
+#Image: https://sw23993.files.wordpress.com/2017/05/rplot1.png?w=456
