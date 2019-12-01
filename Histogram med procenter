@@ -1,0 +1,11 @@
+https://stackoverflow.com/questions/38350749/histogram-with-ggplot2-change-xticks-percentage-of-y
+
+
+#Code: 
+
+df <- data.frame(x = sample (1:3000, 20000, replace = T))
+
+ggplot(df, aes(x = x)) + 
+  geom_histogram(aes(y = (..count..)/sum(..count..)))  +
+  scale_y_continuous(labels = scales::percent) +
+  scale_x_log10(breaks=c(1,100,1000)) 
