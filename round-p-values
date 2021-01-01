@@ -4,3 +4,5 @@ myround2 <- function(x, digits = 3){
   if (x < 5*10^-digits) return(paste('<', 5*10^-digits))
   paste('=', myround(x, digits))
 }
+
+# A different apparoach in a Markdown doucment could be:
