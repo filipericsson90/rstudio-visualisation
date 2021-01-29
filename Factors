@@ -1,2 +1,1 @@
-# Lav alle faktor-nivaeuer i df til 0 og 1:
-df <- lapply(df, factor, levels = c(0, 1))
+
