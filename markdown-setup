@@ -1,0 +1,33 @@
+---
+title: "The predictive value of transthoracal echocardiographic findings and computer tomography coronary angiography results for future invasive cardiac interventions"
+author: "Filip Ericsson, MD^[Department of Cardiology, Aalborg University Hospital]"
+output: 
+  word_document:
+    reference_docx: "word_template.docx"
+bibliography: 
+  - "library.bib"
+  - "packages.bib"
+csl: "european-heart-journal.csl"
+
+---
+
+```{r setup, include=FALSE}
+
+dir.create(c("Code", "Plots", "Literature", "Output", "Data"))
+write_bib(x = (.packages()), file = "packages.bib") # Create a bibliography file for the packages used in the article
+library(tidyverse)
+library(knitr)
+library(patchwork)
+library(Hmisc)
+library(readxl)
+library(epiR)
+library(extrafont)
+library(extrafontdb)
+library(tableone)
+library(patchwork)
+library(nricens)
+library(DescTools)
+library(stargazer)
+library(kableExtra)
+
+```
