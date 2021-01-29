@@ -18,3 +18,7 @@ char.10 <- function(a) {
 ## Extracting coefficients and confidence intervals in a glm model and print it out in a data-frame format
 toOR <- function(glm.model) {
   cbind(exp(cbind("OR" = coef(glm.model), confint(glm.model))), "p-value" = coef(summary(glm.model))[,4])
+
+
+# Lav alle faktor-nivaeuer i df til 0 og 1:
+df <- lapply(df, factor, levels = c(0, 1))
