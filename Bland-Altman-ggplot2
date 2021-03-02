@@ -1,3 +1,7 @@
+# This function creates a Bland Altman plot with 95% confidence intervals, using ggplot2. All that is needed to specify is two variables, the rest is automatically calculated and the output is a ggplot2-object, which can be modifired afterwards as a normal ggplot2-object, eg.
+
+# blandme(var1, var2) + labs(x = "Lollercopter", y = "Forskel", title = "Example of a title")
+
 blandme <- function(var1, var2) {
   df$avg <- ((var1+var2)/2)
   df$difference <- var1-var2
