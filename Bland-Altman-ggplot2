@@ -1,0 +1,17 @@
+blandme <- function(var1, var2) {
+  df$avg <- ((var1+var2)/2)
+  df$difference <- var1-var2
+  
+  ggplot(data = df, aes(x = avg, y = difference)) + 
+    geom_jitter() + 
+    geom_hline(yintercept = mean(mean(df$difference)),  color = "steelblue4", size =1) + 
+    geom_hline(yintercept = mean(df$difference) - (1.96 * sd(df$difference)), color = "dark red", size = 1, linetype = "dashed") + 
+    geom_hline(yintercept = mean(df$difference) + (1.96 * sd(df$difference)), color = "dark red", size = 1, linetype = "dashed") +
+    theme_bw() + 
+    theme(text = element_text(family = "Times New Roman", size = 14), axis.title = element_text(face = "bold")) + 
+    labs(
+      title = "Bland Altman Plot of the means of difference",
+      x = "BA Average",
+      y = "Difference"
+    )
+}
