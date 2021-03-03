@@ -1,21 +1,31 @@
-# This function creates a Bland Altman plot with 95% confidence intervals, using ggplot2. All that is needed to specify is two variables, the rest is automatically calculated and the output is a ggplot2-object, which can be modifired afterwards as a normal ggplot2-object, eg.
+# This function creates a Bland Altman plot with 95% confidence intervals (marked with dashed, red lines and a gray box, using ggplot2. All that is needed to specify is two variables, the rest is automatically calculated and the output is a ggplot2-object, which can be modifired afterwards as a normal ggplot2-object as shown below. 
 
 # blandme(var1, var2) + labs(x = "Lollercopter", y = "Forskel", title = "Example of a title")
 
 blandme <- function(var1, var2) {
-  df$avg <- ((var1+var2)/2)
-  df$difference <- var1-var2
+  df <- data.frame(avg = ((var1+var2)/2), 
+                   difference = var1-var2)
   
   ggplot(data = df, aes(x = avg, y = difference)) + 
-    geom_jitter() + 
+    geom_rect(aes(xmin = min(avg)-10, 
+                  xmax = max(avg)+10, 
+                  ymin = mean(difference) - (1.96 * sd(difference)), 
+                  ymax = mean(difference) + (1.96 * sd(difference))), 
+              fill = "gray82", 
+              alpha = 1/40) + 
+    geom_point() + 
     geom_hline(yintercept = mean(mean(df$difference)),  color = "steelblue4", size =1) + 
     geom_hline(yintercept = mean(df$difference) - (1.96 * sd(df$difference)), color = "dark red", size = 1, linetype = "dashed") + 
     geom_hline(yintercept = mean(df$difference) + (1.96 * sd(df$difference)), color = "dark red", size = 1, linetype = "dashed") +
     theme_bw() + 
-    theme(text = element_text(family = "Times New Roman", size = 14), axis.title = element_text(face = "bold")) + 
+    theme(text = element_text(family = "Times New Roman", size = 14), 
+          axis.title = element_text(face = "bold", size = 14),
+          axis.text = element_text(size = 15),
+          plot.margin = margin(.5,.5,.5,.5, "cm")) + 
     labs(
-      title = "Bland Altman Plot of the means of difference",
+      title = "Bland Altman plot of the means of difference",
       x = "BA Average",
       y = "Difference"
-    )
+    ) +
+    scale_x_continuous(expand = c(0,0))
 }
