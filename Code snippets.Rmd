@@ -1,0 +1,153 @@
+# Markdown code snippets
+
+## Writing numbers as characters-function
+char.10 <- function(a) {
+  
+  ifelse(a == 1, paste("one"), 
+         ifelse(a == 2, paste("two"),
+                ifelse(a == 3, paste("three"),
+                       ifelse(a == 4, paste("four"),
+                              ifelse(a == 5, paste("five"),
+                                     ifelse(a == 6, paste("six"),
+                                            ifelse(a == 7, paste("seven"),
+                                                   ifelse(a == 8, paste("eight"),
+                                                          ifelse(a == 9, paste("nine"),
+                                                                 ifelse(a == 10, paste("ten"), a))))))))))
+}
+
+## Extracting coefficients and confidence intervals in a glm model and print it out in a data-frame format
+toOR <- function(glm.model) {
+  cbind(exp(cbind("OR" = coef(glm.model), confint(glm.model))), "p-value" = coef(summary(glm.model))[,4])
+
+
+
+#### Lav alle faktor-nivaeuer i df til 0 og 1: ####
+df <- lapply(df, factor, levels = c(0, 1))
+
+
+# To one decimal
+my.round1 <- function(x) {
+  format(x, digits = 1, nsmall = 1)
+}
+
+
+# To two decimals
+my.round2 <- function(x) {
+  format(x, digits = 2, nsmall = 2)
+}
+
+
+## Percent sign in the article
+tilprocenter <- function(x) {
+  y <- format(100*(x), digits = 2, nsmall = 2)
+  paste0(y,"%")
+} 
+
+# Udskriv tal under ti som bogstaver
+udskriv.tal <- function(x) {
+  ifelse(x  == 1, "one", 
+         ifelse(x == 2, "two", 
+                ifelse(x == 3, "three",
+                       ifelse(x == 4, "four",
+                              ifelse(x == 5, "five",
+                                     ifelse (x == 6, "six",
+                                             ifelse(x == 7, "seven",
+                                                    ifelse(x == 8, "eight",
+                                                           ifelse(x == 9, "nine",
+                                                                  ifelse(x == 10, "ten", x))))))))))
+}
+
+# Bland Altman plot in ggplot!
+blandme <- function(var1, var2) {
+  library(tidyverse)
+  library(extrafont)
+  library(blandr)
+  df <- data.frame(avg = ((var1+var2)/2), 
+                   difference = var1-var2)
+  bias <- blandr.statistics(var1, var2)$bias
+  bias.ci.up <- blandr.statistics(var1, var2)$biasUpperCI
+  bias.ci.low <- blandr.statistics(var1, var2)$biasLowerCI
+  loa.up <- blandr.statistics(var1, var2)$upperLOA
+  loa.low <- blandr.statistics(var1, var2)$lowerLOA
+  up.upperloa <- blandr.statistics(var1, var2)$upperLOA_upperCI
+  up.lowerloa <- blandr.statistics(var1, var2)$upperLOA_lowerCI
+  low.upperloa <- blandr.statistics(var1, var2)$lowerLOA_upperCI
+  low.lowerloa <- blandr.statistics(var1, var2)$lowerLOA_lowerCI
+  
+  ggplot(data = df, aes(x = avg, y = difference)) + 
+    geom_rect(aes(xmin = min(avg)-10, 
+                  xmax = max(avg)+10, 
+                  ymin = mean(difference) - (1.96 * sd(difference)), 
+                  ymax = mean(difference) + (1.96 * sd(difference))), 
+              fill = "gray82", 
+              alpha = 1/40) + 
+    geom_hline(yintercept = bias,  color = "steelblue4", size =1, alpha = 1) + 
+    geom_hline(yintercept = bias.ci.low, color = "steelblue4", size = 1, linetype = "dotted") + 
+    geom_hline(yintercept = bias.ci.up, color = "steelblue4", size = 1, linetype = "dotted") +
+    geom_hline(yintercept = loa.up, color = "dark red", size = 1, linetype = "dashed") +
+    geom_hline(yintercept = loa.low, color = "dark red", size = 1, linetype = "dashed") +
+    geom_hline(yintercept = up.upperloa, color = "dark red", size = 1, linetype = "dotted") +
+    geom_hline(yintercept = up.lowerloa, color = "dark red", size = 1, linetype = "dotted") +
+    geom_hline(yintercept = low.upperloa, color = "dark red", size = 1, linetype = "dotted") +
+    geom_hline(yintercept = low.lowerloa, color = "dark red", size = 1, linetype = "dotted") +
+    geom_jitter() + 
+    theme_bw() + 
+    theme(text = element_text(family = "Times New Roman", size = 15), 
+          axis.title = element_text(face = "bold", size = 15),
+          axis.text = element_text(size = 16),
+          plot.margin = margin(.5,.5,.5,.5, "cm"),
+          plot.caption = element_text(size = 15),
+          panel.grid = element_blank()) + 
+    labs(
+      title = "Bland Altman plot of the means of difference",
+      subtitle = "With 95% confidence intervals",
+      x = "BA Average",
+      y = "Difference",
+      caption = paste("Mean difference: ", round(mean(df$difference), 2), paste("\nSD: ", "\u00B1", round(sd(df$difference), 2)), "")) +
+    scale_x_continuous(expand = c(0,0))
+  }
+
+# BA-output in Markdown document
+blandme.output <- function(observation1, observation2) {
+  if(missing(observation1)) {
+    print("Error: Please provide two values in order to calculate the BA-output.")
+  }
+  else 
+    if(missing(observation2)) {
+      print("Error: Please provide two values in order to calculate the BA-output.")
+    }
+  else {
+    df <- data.frame(avg = (observation1+observation2)/2, 
+                     difference = observation1-observation2)
+    paste0("Means of difference: ", round(mean(df$difference), 2), " ","(SD: ", round(sd(df$difference), 2),")")
+  }
+}
+
+# -------------------- Korrelationsanalyser ----------------------------
+
+# BA-output, med 95% konfidensintervaller og r-value, ICC
+cor.bland.95 <- function(observation1, observation2) {
+  if(missing(observation1)) {
+    print("Error: Please provide two values in order to calculate output.")
+  }
+  else 
+    if(missing(observation2)) {
+      print("Error: Please provide two values in order to calculate output.")
+    }
+  else {
+    df <- data.frame(avg = (observation1+observation2)/2, 
+                     difference = observation1-observation2)
+    
+    paste0("MD: ", format(mean(df$difference), digits = 2, nsmall = 2), " ",
+           "(95% CI: ", 
+           my.round2(mean(df$difference) - 1.96*sd(df$difference)), 
+           "-", 
+           my.round2(mean(df$difference) + 1.96*sd(df$difference)), "), ",
+           "r^2^: ", my.round2(cor(observation1, observation2)), ", ",
+           "ICC: ", format(ICCest(observation1, observation2)$ICC, digits = 2),
+           " (95% CI: ", my.round2(ICCest(observation1, observation2)$LowerCI),
+           "-",
+           my.round2(ICCest(observation1, observation2)$UpperCI),
+           ")")
+  }
+}
