@@ -1,6 +1,7 @@
 ---
-title: "The predictive value of transthoracal echocardiographic findings and computer tomography coronary angiography results for future invasive cardiac interventions"
-author: "Filip Ericsson, MD^[Department of Cardiology, Aalborg University Hospital]"
+title: "title"
+subtitle: "subtitle"
+author: "authornames"
 output: 
   word_document:
     reference_docx: "word_template.docx"
@@ -29,5 +30,7 @@ library(nricens)
 library(DescTools)
 library(stargazer)
 library(kableExtra)
+library(tidyverse)
+library(blandr)
 
 ```
