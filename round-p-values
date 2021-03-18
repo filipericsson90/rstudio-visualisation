@@ -1,8 +1,0 @@
-# A function for automatically write out < 0.0005 values instead of rounding them. 
-# Can be changed depending on the situation and how many digits needed.
-myround2 <- function(x, digits = 3){
-  if (x < 5*10^-digits) return(paste('<', 5*10^-digits))
-  paste('=', myround(x, digits))
-}
-
-# A different apparoach in a Markdown doucment could be:
