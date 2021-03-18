@@ -6,3 +6,5 @@ Indtil videre indholder den her repository følgende:
   1. ggplot2-visualiseringstips
   2. dplyr-tips med data wrangling
   3. Kode snippets for at extrahere information fra glm-modeller
+
+Lad os finde ud af om det her fungerer!
