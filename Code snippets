@@ -1,8 +1,7 @@
 # Markdown code snippets
 
 ## Writing numbers as characters-function
-char.10 <- function(a) {
-  
+char.10 <- function(a) {  
   ifelse(a == 1, paste("one"), 
          ifelse(a == 2, paste("two"),
                 ifelse(a == 3, paste("three"),
