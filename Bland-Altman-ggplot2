@@ -1,10 +1,21 @@
 # This function creates a Bland Altman plot with 95% confidence intervals (marked with dashed, red lines and a gray box, using ggplot2. All that is needed to specify is two variables, the rest is automatically calculated and the output is a ggplot2-object, which can be modifired afterwards as a normal ggplot2-object as shown below. 
-
-# blandme(var1, var2) + labs(x = "Lollercopter", y = "Forskel", title = "Example of a title")
+Requires tidyverse, extrafont and blandr-package to work:
 
 blandme <- function(var1, var2) {
+  library(tidyverse)
+  library(extrafont)
+  library(blandr)
   df <- data.frame(avg = ((var1+var2)/2), 
                    difference = var1-var2)
+  bias <- blandr.statistics(var1, var2)$bias
+  bias.ci.up <- blandr.statistics(var1, var2)$biasUpperCI
+  bias.ci.low <- blandr.statistics(var1, var2)$biasLowerCI
+  loa.up <- blandr.statistics(var1, var2)$upperLOA
+  loa.low <- blandr.statistics(var1, var2)$lowerLOA
+  up.upperloa <- blandr.statistics(var1, var2)$upperLOA_upperCI
+  up.lowerloa <- blandr.statistics(var1, var2)$upperLOA_lowerCI
+  low.upperloa <- blandr.statistics(var1, var2)$lowerLOA_upperCI
+  low.lowerloa <- blandr.statistics(var1, var2)$lowerLOA_lowerCI
   
   ggplot(data = df, aes(x = avg, y = difference)) + 
     geom_rect(aes(xmin = min(avg)-10, 
@@ -13,19 +24,28 @@ blandme <- function(var1, var2) {
                   ymax = mean(difference) + (1.96 * sd(difference))), 
               fill = "gray82", 
               alpha = 1/40) + 
-    geom_point() + 
-    geom_hline(yintercept = mean(mean(df$difference)),  color = "steelblue4", size =1) + 
-    geom_hline(yintercept = mean(df$difference) - (1.96 * sd(df$difference)), color = "dark red", size = 1, linetype = "dashed") + 
-    geom_hline(yintercept = mean(df$difference) + (1.96 * sd(df$difference)), color = "dark red", size = 1, linetype = "dashed") +
+    geom_hline(yintercept = bias,  color = "steelblue4", size =1, alpha = 1) + 
+    geom_hline(yintercept = bias.ci.low, color = "steelblue4", size = 1, linetype = "dotted") + 
+    geom_hline(yintercept = bias.ci.up, color = "steelblue4", size = 1, linetype = "dotted") +
+    geom_hline(yintercept = loa.up, color = "dark red", size = 1, linetype = "dashed") +
+    geom_hline(yintercept = loa.low, color = "dark red", size = 1, linetype = "dashed") +
+    geom_hline(yintercept = up.upperloa, color = "dark red", size = 1, linetype = "dotted") +
+    geom_hline(yintercept = up.lowerloa, color = "dark red", size = 1, linetype = "dotted") +
+    geom_hline(yintercept = low.upperloa, color = "dark red", size = 1, linetype = "dotted") +
+    geom_hline(yintercept = low.lowerloa, color = "dark red", size = 1, linetype = "dotted") +
+    geom_jitter() + 
     theme_bw() + 
-    theme(text = element_text(family = "Times New Roman", size = 14), 
-          axis.title = element_text(face = "bold", size = 14),
-          axis.text = element_text(size = 15),
-          plot.margin = margin(.5,.5,.5,.5, "cm")) + 
+    theme(text = element_text(family = "Times New Roman", size = 15), 
+          axis.title = element_text(face = "bold", size = 15),
+          axis.text = element_text(size = 16),
+          plot.margin = margin(.5,.5,.5,.5, "cm"),
+          plot.caption = element_text(size = 15),
+          panel.grid = element_blank()) + 
     labs(
       title = "Bland Altman plot of the means of difference",
+      subtitle = "With 95% confidence intervals",
       x = "BA Average",
-      y = "Difference"
-    ) +
+      y = "Difference",
+      caption = paste("Mean difference: ", round(mean(df$difference), 2), paste("\nSD: ", "\u00B1", round(sd(df$difference), 2)), "")) +
     scale_x_continuous(expand = c(0,0))
-}
+  }
