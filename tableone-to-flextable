@@ -12,3 +12,7 @@ table2 <- table1 %>%
   align(align = "left", part = "header") %>% 
   add_header_lines("Table x: header-here") %>%
   add_footer_lines("footer-here")
+
+
+# For output in Word:
+print(table2, preview = "docx")
