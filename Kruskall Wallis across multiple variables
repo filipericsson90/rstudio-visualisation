@@ -2,7 +2,7 @@
 
 df %>% 
   select(contains(c(variables_you_want_to_investigate)), grouping_variable) %>% 
-  gather(key, value, -grouping_variable) %>% 
+  gather(names_to = "key", values_to "value", -grouping_variable) %>% 
   group_by(key) %>% 
   summarise(tidy(kruskal.test(x = value, g = grouping_variable)))
   
