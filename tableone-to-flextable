@@ -4,6 +4,7 @@ library("tableone")
 table1 <- # a table one object
 
 table2 <- table1 %>%
+  print() %>%
   as.data.frame() %>%
   rownames_to_column("Variables")%>% 
   flextable() %>%
