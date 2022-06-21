@@ -1,9 +1,0 @@
-# Apply Kruskal-Wallis test across multiple columns at once: 
-library(tidyverse)
-library(broom)
-
-df %>% 
-  select(contains(c(variables_you_want_to_investigate)), grouping_variable) %>% 
-  pivot_longer(names_to = "key", values_to = "value", -grouping_variable) %>% 
-  group_by(key) %>% 
-  summarise(tidy(kruskal.test(x = value, g = grouping_variable)))

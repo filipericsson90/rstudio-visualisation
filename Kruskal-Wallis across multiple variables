@@ -1,0 +1,33 @@
+# We investiagte whether a specific parameter influences another parameter. Apply Kruskal-Wallis test across multiple columns at once: 
+
+# Load in dependencies
+library("tidyverse")
+library("broom")
+
+
+df <- # [insert your data.frame/data.table/tibble here]
+
+df %>% 
+  select(contains(c(variables_you_want_to_investigate)), grouping_variable) %>% 
+  pivot_longer(names_to = "key", values_to = "value", -grouping_variable) %>% # We create a long data set, with all columns except for the grouping variable, keeping that one as a one long column
+  group_by(key) %>% 
+  summarise(tidy(kruskal.test(x = value, g = grouping_variable))) # we create a data frame
+  
+print(df)
+
+#### Also as a function: ####
+
+kw_print <- function(data, variables, grouping_variable) {
+  
+  # read in dependencies
+  library("dplyr") 
+  library("broom")
+  
+  df <- as.tibble(data) %>%
+    select(variables, grouping_variable) %>% 
+    pivot_longer(names_to = "key", values_to = "value", -grouping_variable) %>%
+    group_by(key) %>% 
+    summarise(tidy(kruskal.test(x = value, g = grouping_variable)))
+  
+   print(df)
+  }
